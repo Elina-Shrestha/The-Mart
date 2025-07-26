@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shop - Anon Store</title>
+  <link rel="stylesheet" href="your-css-file.css"> <!-- Link your CSS -->
+</head>
+<body>
+
+<h1>Welcome to our Shop!</h1>
+
+<div id="products">
+  <!-- Products will be loaded here using fetch from products.php -->
+</div>
+
+<script>
+// Load products from products.php
+fetch('products.php')
+.then(response => response.json())
+.then(products => {
+  const container = document.getElementById('products');
+  products.forEach(product => {
+    container.innerHTML += `
+      <div>
+        <h2>${product.name}</h2>
+        <p>${product.description}</p>
+        <p>$${product.price}</p>
+        <button onclick="buyNow(${product.id})">Buy Now</button>
+      </div>
+    `;
+  });
+});
+
+// Buy Now function (to add to cart)
+function buyNow(productId) {
+  fetch('cart.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'product_id=' + productId + '&quantity=1'
+  })
+  .then(response => response.text())
+  .then(data => {
+    alert("Product added to cart!");
+  });
+}
+</script>
+
+</body>
+</html>
